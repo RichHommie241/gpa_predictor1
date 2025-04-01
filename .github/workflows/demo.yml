@@ -1,14 +1,22 @@
 name: Run GPA Predictor
 on: [workflow_dispatch]
+
 jobs:
   demo:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      
       - uses: actions/setup-python@v5
         with:
           python-version: "3.10"
-      - run: pip install -r requirements.txt
-      - run: |
-          sudo apt-get install python3-tk
-          python gpa_predictor.py
+          
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          pip install -r requirements.txt
+          sudo apt-get install -y python3-tk xvfb
+          
+      - name: Run GPA Predictor
+        run: |
+          xvfb-run python gpa_predictor.py
